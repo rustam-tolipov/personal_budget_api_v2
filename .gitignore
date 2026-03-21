@@ -28,3 +28,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /.env
+
+# Claude Code working files
+CLAUDE.md
+CLAUDE_CHAT.md
