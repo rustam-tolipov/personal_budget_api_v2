@@ -1,12 +1,11 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.2.1"
+ruby "3.3.6"
 gem 'active_model_serializers'
 gem "bootsnap", require: false
 gem 'cloudinary'
 gem 'carrierwave'
-gem 'cancancan'
 gem 'devise'
 gem 'devise-jwt'
 gem 'dotenv-rails'
