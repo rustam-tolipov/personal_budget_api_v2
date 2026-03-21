@@ -225,7 +225,7 @@ Project Link: [https://github.com/Rustamxon7/personal_budget_v2](https://github.
 [issues-shield]: https://img.shields.io/github/issues/Rustamxon7/personal_budget_v2.svg?style=for-the-badge
 [issues-url]: https://github.com/Rustamxon7/personal_budget_v2/issues
 [license-shield]: https://img.shields.io/github/license/Rustamxon7/personal_budget_v2.svg?style=for-the-badge
-[license-url]: https://github.com/Rustamxon7/personal_budget_v2/blob/master/LICENSE.txt
+[license-url]: https://github.com/Rustamxon7/personal_budget_v2/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/rustam-tolipov
 [product-screenshot]: images/screenshot.png
