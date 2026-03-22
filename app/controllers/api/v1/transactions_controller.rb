@@ -44,41 +44,43 @@ module Api
         @transaction = Transaction.new(transaction_params)
         @transaction.group = @transaction.category.kind
 
-        if @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).nil?
-          @transaction.category.total_amounts.create(member_id: @transaction.member_id, amount: @transaction.amount, kind: @transaction.category.kind)
-        else
-          total_amount = @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).amount + @transaction.amount
-          @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).update(amount: total_amount)
+        ActiveRecord::Base.transaction do
+          if @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).nil?
+            @transaction.category.total_amounts.create!(member_id: @transaction.member_id, amount: @transaction.amount, kind: @transaction.category.kind)
+          else
+            total_amount = @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).amount + @transaction.amount
+            @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).update!(amount: total_amount)
+          end
+
+          @transaction.save!
         end
 
-        if @transaction.save
-          render json: @transaction, serializer: TransactionSerializer, status: :created
-        else
-          render json: { errors: @transaction.errors.full_messages }, status: :unprocessable_entity
-        end
+        render json: @transaction, serializer: TransactionSerializer, status: :created
+      rescue ActiveRecord::RecordInvalid => e
+        render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
       end
 
       def update
         @transaction = Transaction.find(params[:id])
 
-        if @transaction.amount != transaction_params[:amount].to_f
-          total_amount = @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).amount - @transaction.amount + transaction_params[:amount].to_f
-          @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).update(amount: total_amount)
+        ActiveRecord::Base.transaction do
+          if @transaction.amount != transaction_params[:amount].to_f
+            total_amount = @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).amount - @transaction.amount + transaction_params[:amount].to_f
+            @transaction.category.total_amounts.find_by(member_id: @transaction.member_id).update!(amount: total_amount)
+          end
+
+          @transaction.update!(transaction_params)
         end
 
-        if @transaction.update(transaction_params)
-          render json: @transaction, serializer: TransactionSerializer, status: :ok
-        else
-          render json: { errors: @transaction.errors.full_messages }, status: :unprocessable_entity
-        end
+        render json: @transaction, serializer: TransactionSerializer, status: :ok
+      rescue ActiveRecord::RecordInvalid => e
+        render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
       end
 
       def destroy
         @transaction = Transaction.find(params[:id])
 
         if @transaction.destroy
-          puts "🌱🌱🌱 Transaction deleted! 🌱🌱🌱"
-
           render json: @transaction, serializer: TransactionSerializer, status: :ok
         else
           render json: { errors: @transaction.errors.full_messages }, status: :unprocessable_entity
