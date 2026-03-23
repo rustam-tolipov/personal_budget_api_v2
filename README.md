@@ -5,227 +5,166 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Rustamxon7/personal_budget_v2">
+  <a href="https://github.com/Rustamxon7/personal_budget_api_v2">
     <img src="images/beedget.svg" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Personal Budget Planner API</h3>
+  <h3 align="center">Personal Budget Planner API</h3>
 
   <p align="center">
-Introducing our Personal Budget Planner: the easiest way to manage your finances. With our app, effortlessly track your spending and income while collaborating with your family.
-
-Invite your loved ones using just your email. They can join in and track their own finances. It's a simple way to promote transparency and teamwork.
-
-No more complicated spreadsheets. Our user-friendly interface makes budgeting a breeze.
-
-Take charge of your financial future today with our Personal Budget Planner. Achieve your goals and create a healthier financial life for your family.
-<br />
-<a href="https://github.com/Rustamxon7/personal_budget_v2"><strong>Explore the docs »</strong></a>
-<br />
-<br />
-<a href="https://budget.rustam.one/user/dashboard">View Demo</a>
-·
-<a href="https://github.com/Rustamxon7/personal_budget_v2/issues">Report Bug</a>
-·
-<a href="https://github.com/Rustamxon7/personal_budget_v2/issues">Request Feature</a>
-
+    A Rails 7 JSON API for collaborative family budget tracking.
+    <br />
+    <a href="https://github.com/Rustamxon7/personal_budget_api_v2/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/Rustamxon7/personal_budget_api_v2/issues">Request Feature</a>
   </p>
 </div>
 
-## Front End Repo Link: [Personal Budget Planner UI](https://github.com/Rustamxon7/personal_budget_v2_ui)
+---
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+## About
 
-<!-- ABOUT THE PROJECT -->
+A Rails 7 API-only backend for tracking personal and family finances. Users can create budget members (family participants), assign income/expense categories to them, and log transactions. Each write updates a cached `total_amounts` table to avoid recomputing balances on every read.
 
-## About The Project
+**Frontend repo:** [personal_budget_ui_v2](https://github.com/Rustamxon7/personal_budget_ui_v2)
 
-Introducing our Personal Budget Planner: the easiest way to manage your finances. With our app, effortlessly track your spending and income while collaborating with your family.
+---
 
-Invite your loved ones using just your email. They can join in and track their own finances. It's a simple way to promote transparency and teamwork.
+## Tech Stack
 
-No more complicated spreadsheets. Our user-friendly interface makes budgeting a breeze.
+- **Ruby** 3.3.6 / **Rails** 7.0
+- **PostgreSQL**
+- **Devise** + **devise-jwt** - JWT authentication (token in `Authorization: Bearer` header, 48h expiry)
+- **CarrierWave** + **Cloudinary** - avatar uploads
+- **Active Model Serializers** - JSON response shaping
+- **RSpec** - request and model specs
+- **Rswag** - Swagger API docs at `/`
+- **Fly.io** - deployment
 
-Take charge of your financial future today with our Personal Budget Planner. Achieve your goals and create a healthier financial life for your family.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-### Built With
-
-- [Ruby on Rails](https://rubyonrails.org/)
-- [Ruby](https://www.ruby-lang.org/en/)
-- [React.js](https://reactjs.org/)
-- [Redux](https://redux.js.org/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Restful API](https://restfulapi.net/)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- GETTING STARTED -->
+---
 
 ## Getting Started
 
-To get started with our Personal Budget Planner, follow these simple steps:
-
-
-
 ### Prerequisites
 
-For Ruby:
-
-- 
-  ```sh
-  ruby --version => ruby 3.2.1
-  ```
+- Ruby 3.3.6
+- PostgreSQL running locally
 
 ### Installation
 
 1. Clone the repo
 
    ```sh
-   git clone https://github.com/Rustamxon7/personal_budget_v2.git
+   git clone https://github.com/Rustamxon7/personal_budget_api_v2.git
+   cd personal_budget_api_v2
    ```
-3. Personalize .env file
+
+2. Install dependencies
 
    ```sh
-    cp .env.example .env
+   bundle install
    ```
-4. Run bundle install for Ruby
+
+3. Set up environment variables
 
    ```sh
-    bundle install
+   cp .env.example .env
    ```
-5. Run `rails db:reset` to create, load and seed db
+
+   Fill in your PostgreSQL credentials, Cloudinary keys, and a `SECRET_KEY_BASE` (generate one with `rails secret`).
+
+4. Set up the database
 
    ```sh
-    rails db:reset
+   rails db:reset
    ```
-6. Run `rails s` to start server
+
+5. Start the server
 
    ```sh
-    rails s
+   rails s
    ```
 
+---
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+## Authentication
 
-<!-- USAGE EXAMPLES -->
+Authentication uses Devise with JWT tokens.
 
-## Usage
+- **Sign up:** `POST /api/v1/auth/signup`
+- **Log in:** `POST /api/v1/auth/login` - returns a JWT token in the response
+- **Log out:** `DELETE /api/v1/auth/logout`
 
-This is a simple desciption of how to use our Personal Budget Planner.
+Pass the token on all subsequent requests:
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+```
+Authorization: Bearer <token>
+```
 
-<!-- ROADMAP -->
+Tokens expire after 48 hours. There is currently no token denylist - logging out does not invalidate the token server-side. See [Known Limitations](#known-limitations).
 
-## Roadmap
+---
 
-- [ ] Login or Use Guest User Button:
-  -  Launch the application and either log in with your credentials or choose the guest user option to access the basic features.
-  -  If you are a new user, follow the registration process to create your account.
-- [ ] Add Members:
-  -  Go to sidebar and click on the "Add Members" button.
-  -  Enter username and press "Add" button.
-- [ ] Add Categories:
-  -  Go to dashboard and click on the "+" button.
-  -  Enter category name and press "Add" button.
-- [ ] Add Transactions:
-  -  Go to dashboard and click on the "Add Transaction" button.
-  -  Enter transaction details and press "Add" button.
-- [ ] Others:
-  -  You can edit or delete your transactions and categories.
-  -  You can also edit your profile information.
+## Data Model
 
-See the [open issues](https://github.com/Rustamxon7/personal_budget_v2/issues) for a full list of proposed features (and known issues).
+```
+User
+ └── Members (budget participants)
+      └── Categories (income or expense)
+           └── Transactions
+                └── TotalAmounts (cached balance per category + member)
+```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+- A `User` auto-creates a default `Member` on registration
+- `Categories` are shared across members via a join table
+- Each `Transaction` write updates the corresponding `TotalAmount` record inside a database transaction block
 
-<!-- CONTRIBUTING -->
+---
 
-## Contributing
+## Running Tests
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+```sh
+bundle exec rspec
+```
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+---
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## Known Limitations
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+These are documented gaps - not bugs to work around, but areas planned for future improvement:
 
-<!-- LICENSE -->
+- **No authorization layer** - any authenticated user can read or modify any other user's data. Ownership checks are not enforced beyond `authenticate_user!`.
+- **No JWT token denylist** - logging out does not revoke the token server-side. A stolen token remains valid until expiry.
+- **CarrierWave** - planned replacement with ActiveStorage.
+- **Active Model Serializers** - planned replacement with jsonapi-serializer.
+
+---
 
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- CONTACT -->
+---
 
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - rustamxontolipov788@gmail.com
+Rustam Tolipov - rustamtolipov.dev@gmail.com
 
-Project Link: [https://github.com/Rustamxon7/personal_budget_v2](https://github.com/Rustamxon7/personal_budget_v2)
+Project Link: [https://github.com/Rustamxon7/personal_budget_api_v2](https://github.com/Rustamxon7/personal_budget_api_v2)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+---
 
-<!-- ACKNOWLEDGMENTS -->
-
-## Acknowledgments
-
-- [Special thanks to Ventionteams to gave me such experience](https://ventionteams.com/)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/Rustamxon7/personal_budget_v2.svg?style=for-the-badge
-[contributors-url]: https://github.com/Rustamxon7/personal_budget_v2/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Rustamxon7/personal_budget_v2.svg?style=for-the-badge
-[forks-url]: https://github.com/Rustamxon7/personal_budget_v2/network/members
-[stars-shield]: https://img.shields.io/github/stars/Rustamxon7/personal_budget_v2.svg?style=for-the-badge
-[stars-url]: https://github.com/Rustamxon7/personal_budget_v2/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Rustamxon7/personal_budget_v2.svg?style=for-the-badge
-[issues-url]: https://github.com/Rustamxon7/personal_budget_v2/issues
-[license-shield]: https://img.shields.io/github/license/Rustamxon7/personal_budget_v2.svg?style=for-the-badge
-[license-url]: https://github.com/Rustamxon7/personal_budget_v2/blob/master/LICENSE
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/rustam-tolipov
-[product-screenshot]: images/screenshot.png
+<!-- MARKDOWN LINKS -->
+[contributors-shield]: https://img.shields.io/github/contributors/Rustamxon7/personal_budget_api_v2.svg?style=for-the-badge
+[contributors-url]: https://github.com/Rustamxon7/personal_budget_api_v2/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/Rustamxon7/personal_budget_api_v2.svg?style=for-the-badge
+[forks-url]: https://github.com/Rustamxon7/personal_budget_api_v2/network/members
+[stars-shield]: https://img.shields.io/github/stars/Rustamxon7/personal_budget_api_v2.svg?style=for-the-badge
+[stars-url]: https://github.com/Rustamxon7/personal_budget_api_v2/stargazers
+[issues-shield]: https://img.shields.io/github/issues/Rustamxon7/personal_budget_api_v2.svg?style=for-the-badge
+[issues-url]: https://github.com/Rustamxon7/personal_budget_api_v2/issues
+[license-shield]: https://img.shields.io/github/license/Rustamxon7/personal_budget_api_v2.svg?style=for-the-badge
+[license-url]: https://github.com/Rustamxon7/personal_budget_api_v2/blob/master/LICENSE
