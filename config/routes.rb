@@ -16,7 +16,6 @@ Rails.application.routes.draw do
       post '/members', to: 'members#create'
       get '/settings_members', to: 'members#settings_members', as: :settings_members
 
-      get '/most_resent_members/', to: 'members#most_resent_members', as: :most_resent_members
       get ':id/recent_transactions/', to: 'transactions#recent_transactions', as: :recent_transactions
 
       post '/member/:id/category/:category_id/remove', to: 'categories#remove_from_member', as: :remove_from_member
