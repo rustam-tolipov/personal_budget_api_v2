@@ -3,6 +3,7 @@ class Transaction < ApplicationRecord
   belongs_to :member
 
   validates :name, :group, :amount, presence: true
+  validates :amount, numericality: { greater_than: 0 }
 
   after_destroy :subtract_category_total_amount
 
