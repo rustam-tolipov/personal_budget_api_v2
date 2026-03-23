@@ -74,11 +74,11 @@ module Api
       def destroy
         @member = Member.find(params[:id])
 
-        unless @member.username == current_user.username
-          @member.destroy
-          render json: @member, status: :ok
+        if @member.username == current_user.username
+          return render json: { error: 'Cannot delete your own member' }, status: :forbidden
         end
-        
+
+        @member.destroy
         render json: @member, status: :ok
       end
 
