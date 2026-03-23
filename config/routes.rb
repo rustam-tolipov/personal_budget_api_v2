@@ -20,7 +20,6 @@ Rails.application.routes.draw do
 
       post '/member/:id/category/:category_id/remove', to: 'categories#remove_from_member', as: :remove_from_member
 
-      get '/categories', to: 'categories#index', as: :categories
       post '/categories', to: 'categories#create'
       get '/categories/:id', to: 'categories#show', as: :category
       get '/incomes/:member_id/categories/', to: 'categories#incomes', as: :incomes
