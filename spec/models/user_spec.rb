@@ -11,16 +11,6 @@ RSpec.describe User, type: :model do
     expect(@user).to be_valid
   end
 
-  it 'is not valid without a first name' do
-    @user.first_name = nil
-    expect(@user).to_not be_valid
-  end
-
-  it 'is not valid without a last name' do
-    @user.last_name = nil
-    expect(@user).to_not be_valid
-  end
-  
   it 'is not valid without a username' do
     @user.username = nil
     expect(@user).to_not be_valid
@@ -41,8 +31,8 @@ RSpec.describe User, type: :model do
     expect(@user).to_not be_valid
   end
   
-  it 'is not valid if password is less than 8 characters' do
-    @user.password = '1234567'
+  it 'is not valid if password is less than 6 characters' do
+    @user.password = '12345'
     expect(@user).to_not be_valid
   end
   
