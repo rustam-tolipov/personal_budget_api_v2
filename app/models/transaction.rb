@@ -1,18 +1,20 @@
 class Transaction < ApplicationRecord
-  belongs_to :category
-  belongs_to :member
+  belongs_to :account
+  belongs_to :budget, optional: true
 
-  validates :name, :group, :amount, presence: true
-  validates :amount, numericality: { greater_than: 0 }
+  enum transaction_type: { debit: 0, credit: 1 }
 
-  after_destroy :subtract_category_total_amount
+  validates :name, presence: true, length: { minimum: 2, maximum: 100 }
+  validates :amount, presence: true, numericality: { greater_than: 0 }
+  validates :transaction_type, presence: true
 
-  scope :search, -> (name) { name.present? ? where("name ILIKE ?", "%#{name}%") : none  }
+  validate :account_matches_budget_owner, if: -> { budget.present? }
 
   private
 
-  def subtract_category_total_amount
-    total_amount = self.category.total_amounts.find_by(member_id: self.member_id).amount - self.amount
-    self.category.total_amounts.find_by(member_id: self.member_id).update(amount: total_amount)
+  def account_matches_budget_owner
+    if budget.account_id.present? && budget.account_id != account_id
+      errors.add(:account, "does not own this budget")
+    end
   end
 end
