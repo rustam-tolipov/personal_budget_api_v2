@@ -11,7 +11,7 @@ module Api
           render json: resource, status: :ok
         else
           render json: {
-            error: "User couldn't be created successfully. #{resource.errors.full_messages.to_sentence}"
+            error: "Account couldn't be created successfully. #{resource.errors.full_messages.to_sentence}"
           }, status: :unprocessable_entity
         end
       end
