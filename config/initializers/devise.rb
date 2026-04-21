@@ -11,10 +11,10 @@ Devise.setup do |config|
     # env key where the token is stored
     jwt.secret = ENV['SECRET_KEY_BASE']
     jwt.dispatch_requests = [
-      ['POST', %r{^/login$}]
+      ['POST', %r{^/api/v1/auth/login$}]
     ]
     jwt.revocation_requests = [
-      ['DELETE', %r{^/logout$}]
+      ['DELETE', %r{^/api/v1/auth/logout$}]
     ]
     jwt.expiration_time = 48.hours.from_now.to_i
   end

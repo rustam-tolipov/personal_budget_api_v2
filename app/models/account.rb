@@ -6,8 +6,9 @@ class Account < ApplicationRecord
          :recoverable,
          :rememberable,
          :validatable,
-         :confirmable,
          :jwt_authenticatable, jwt_revocation_strategy: self
+
+  # TODO: re-enable :confirmable once mailer is configured
 
   belongs_to :active_family_group, class_name: 'FamilyGroup', optional: true
 
