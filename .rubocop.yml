@@ -1,0 +1,27 @@
+plugins:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
+  Exclude:
+    - db/schema.rb
+    - db/migrate/*
+    - bin/**/*
+    - vendor/**/*
+    - node_modules/**/*
+
+# API-only app: class-level docs enforced by cop add noise, not value, at this size
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+# Rails specs and seeds legitimately run long
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+    - db/seeds.rb
+    - config/**/*
