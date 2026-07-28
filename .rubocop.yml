@@ -25,3 +25,11 @@ Metrics/BlockLength:
     - spec/**/*
     - db/seeds.rb
     - config/**/*
+
+# Seeds legitimately print progress and bulk-reset tables
+Rails/Output:
+  Exclude:
+    - db/seeds.rb
+Rails/SkipsModelValidations:
+  Exclude:
+    - db/seeds.rb
