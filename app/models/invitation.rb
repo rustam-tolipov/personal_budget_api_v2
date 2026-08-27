@@ -5,7 +5,8 @@ class Invitation < ApplicationRecord
   validates :invitation_email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :token, presence: true, uniqueness: true
   validates :expiration_date, presence: true
-  validates :invitation_email, uniqueness: { scope: :family_group_id, message: "has already been invited to this group" }
+  validates :invitation_email,
+            uniqueness: { scope: :family_group_id, message: 'has already been invited to this group' }
 
   before_validation :generate_token, on: :create
   before_validation :set_expiration_date, on: :create
