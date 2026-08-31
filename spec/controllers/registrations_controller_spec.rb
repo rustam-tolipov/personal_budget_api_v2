@@ -9,14 +9,14 @@ describe Api::V1::RegistrationsController, type: :request do
     before do
       post signup_url,
            params: {
-             user: {
-              id: user.id,
-              first_name: user.first_name,
-              last_name: user.last_name,
-              username: user.username,
-              email: user.email,
-              password: user.password,
-              password_confirmation: user.password_confirmation
+             account: {
+               id: user.id,
+               first_name: user.first_name,
+               last_name: user.last_name,
+               username: user.username,
+               email: user.email,
+               password: user.password,
+               password_confirmation: user.password_confirmation
              }
            }
     end
@@ -33,7 +33,7 @@ describe Api::V1::RegistrationsController, type: :request do
   context 'When an email already exists' do
     before do
       post signup_url, params: {
-        user: {
+        account: {
           first_name: existing_user.first_name,
           last_name: existing_user.last_name,
           email: existing_user.email,

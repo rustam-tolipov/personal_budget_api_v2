@@ -3,11 +3,11 @@ module ApiHelpers
     JSON.parse(response.body)
   end
 
-  def login_with_api(user)
+  def login_with_api(account)
     post '/api/v1/auth/login', params: {
-      user: {
-        email: user.email,
-        password: user.password
+      account: {
+        email: account.email,
+        password: account.password
       }
     }
 
@@ -15,6 +15,6 @@ module ApiHelpers
   end
 
   def set_devise_mapping
-    request.env['devise.mapping'] = Devise.mappings[:user]
+    request.env['devise.mapping'] = Devise.mappings[:account]
   end
 end
