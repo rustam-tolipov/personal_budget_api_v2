@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   mount Rswag::Ui::Engine => '/'
   mount Rswag::Api::Engine => '/api-docs'
 
@@ -14,7 +13,7 @@ Rails.application.routes.draw do
                  },
                  controllers: {
                    registrations: 'api/v1/registrations',
-                   sessions: 'api/v1/sessions',
+                   sessions: 'api/v1/sessions'
                  }, defaults: { format: :json }
 
       devise_scope :account do
@@ -23,7 +22,10 @@ Rails.application.routes.draw do
         post '/password/forgot', to: 'api/v1/passwords#forgot', as: :forgot
         post '/password/reset',  to: 'api/v1/passwords#reset',  as: :reset
       end
+
+      scope module: 'api/v1' do
+        resources :invitations, only: [:create]
+      end
     end
   end
-
 end
