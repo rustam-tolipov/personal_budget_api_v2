@@ -24,7 +24,9 @@ Rails.application.routes.draw do
       end
 
       scope module: 'api/v1' do
-        resources :invitations, only: [:create]
+        resources :family_groups, only: [] do
+          resources :invitations, only: [:create]
+        end
       end
     end
   end

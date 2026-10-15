@@ -57,4 +57,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Jobs are recorded, not run, so specs can assert what was enqueued (have_enqueued_job).
+  config.active_job.queue_adapter = :test
 end
