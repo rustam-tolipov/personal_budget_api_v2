@@ -8,8 +8,6 @@ class InviteUser < InvitationMailerJob
   end
 end
 
-invitation_count = 0
-
 def send_invitation(invitation_email)
   account = Account.find_by(email: 'bob@test.com')
   family_group = FamilyGroup.where(owner: account)
