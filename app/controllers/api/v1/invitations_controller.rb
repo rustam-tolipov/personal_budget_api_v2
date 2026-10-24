@@ -15,6 +15,9 @@ module Api
         else
           render json: { errors: invitation.errors.full_messages }, status: :unprocessable_entity
         end
+      rescue ActiveRecord::RecordNotUnique
+        render json: { errors: ['Invitation email has already been invited to this group'] },
+               status: :unprocessable_entity
       end
 
       private

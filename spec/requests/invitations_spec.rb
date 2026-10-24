@@ -76,5 +76,15 @@ describe 'Invitations', type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
       expect(Invitation.where(invitation_email: 'twice@email.com').count).to eq(1)
     end
+
+    it 'returns 422 when a duplicate slips past validation' do
+      make_request('twice@email.com')
+      allow_any_instance_of(Invitation).to receive(:save).and_raise(ActiveRecord::RecordNotUnique)
+      make_request('twice@email.com')
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(Invitation.where(invitation_email: 'twice@email.com').count).to eq(1)
+      json_response = response.parsed_body
+      expect(json_response['errors']).to eq(['Invitation email has already been invited to this group'])
+    end
   end
 end
