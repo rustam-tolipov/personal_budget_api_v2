@@ -9,7 +9,7 @@
 Devise.setup do |config|
   config.jwt do |jwt|
     # env key where the token is stored
-    jwt.secret = ENV['SECRET_KEY_BASE']
+    jwt.secret = ENV.fetch('SECRET_KEY_BASE', nil)
     jwt.dispatch_requests = [
       ['POST', %r{^/api/v1/auth/login$}]
     ]
@@ -272,7 +272,7 @@ Devise.setup do |config|
   # should add them to the navigational formats lists.
   #
   # The "*/*" below is required to match Internet Explorer requests.
-  config.navigational_formats = ['*/*', :html]
+  config.navigational_formats = []
 
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete

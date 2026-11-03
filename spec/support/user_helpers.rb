@@ -14,15 +14,18 @@ module UserHelpers
   end
 
   def build_user
-    FactoryBot.build(:user, username: user_info[:username], email: user_info[:email], password: user_info[:password], password_confirmation: user_info[:password_confirmation])
+    FactoryBot.build(:account, username: user_info[:username], email: user_info[:email],
+                               password: user_info[:password], password_confirmation: user_info[:password_confirmation])
   end
 
   def already_existing_user(u)
-    FactoryBot.create(:user, username: u.username, email: u.email, password: u.password, password_confirmation: u.password_confirmation)
+    FactoryBot.create(:account, username: u.username, email: u.email, password: u.password,
+                                password_confirmation: u.password_confirmation)
   end
 
   def create_user
-    FactoryBot.create(:user, username: user_info[:username], email: user_info[:email], password: user_info[:password], password_confirmation: user_info[:password_confirmation])
+    FactoryBot.create(:account, username: user_info[:username], email: user_info[:email],
+                                password: user_info[:password], password_confirmation: user_info[:password_confirmation])
   end
 
   def create_member

@@ -1,0 +1,4 @@
+<%= @inviter_name %> invited you to join "<%= @group_name %>" on Budget Planner.
+
+Your invitation code: <%= @invitation.token %>
+It expires on <%= @invitation.expiration_date.to_date %>.

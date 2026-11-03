@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_03_31_000008) do
+ActiveRecord::Schema[7.0].define(version: 2026_10_20_130425) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,6 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_31_000008) do
     t.boolean "invitation_accepted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "sent_at"
     t.index ["family_group_id", "invitation_email"], name: "index_invitations_on_group_and_email", unique: true
     t.index ["family_group_id"], name: "index_invitations_on_family_group_id"
     t.index ["inviter_id"], name: "index_invitations_on_inviter_id"
