@@ -10,5 +10,7 @@ class InvitationMailerJob < ApplicationJob
 
     InvitationMailer.invite(invitation).deliver_now
     invitation.update!(sent_at: Time.current)
+  rescue Net::SMTPFatalError => e
+    Rails.logger.error "Failed to deliver invitation #{invitation_id}: #{e.message}"
   end
 end

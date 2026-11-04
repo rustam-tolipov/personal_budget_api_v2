@@ -27,4 +27,17 @@ RSpec.describe InvitationMailerJob, type: :job do
     expect(InvitationMailer).to have_received(:invite).exactly(5).times
     expect(invitation.reload.sent_at).to be_nil
   end
+
+  it 'does not retry a permanent smtp error' do
+    allow(InvitationMailer).to receive(:invite).and_raise(Net::SMTPFatalError.new('550 mailbox not found'))
+    allow(Rails.logger).to receive(:error)
+    perform_enqueued_jobs do
+      expect do
+        InvitationMailerJob.perform_later(invitation.id)
+      end.not_to raise_error
+    end
+    expect(InvitationMailer).to have_received(:invite).exactly(1).times
+    expect(Rails.logger).to have_received(:error).with(a_string_including("Failed to deliver invitation #{invitation.id}"))
+    expect(invitation.reload.sent_at).to be_nil
+  end
 end
