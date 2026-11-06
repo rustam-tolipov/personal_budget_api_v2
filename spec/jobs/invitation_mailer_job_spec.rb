@@ -40,4 +40,11 @@ RSpec.describe InvitationMailerJob, type: :job do
     expect(Rails.logger).to have_received(:error).with(a_string_including("Failed to deliver invitation #{invitation.id}"))
     expect(invitation.reload.sent_at).to be_nil
   end
+
+  it 're-enqueues itself when the mailer raises Errno::ECONNREFUSED' do
+    allow(InvitationMailer).to receive(:invite).and_raise(Errno::ECONNREFUSED)
+    expect do
+      InvitationMailerJob.perform_now(invitation.id)
+    end.to have_enqueued_job(InvitationMailerJob).with(invitation.id)
+  end
 end
