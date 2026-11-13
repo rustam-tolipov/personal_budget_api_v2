@@ -15,7 +15,11 @@ RSpec.describe CleanupExpiredInvitationsJob, type: :job do
     expect { invitation.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  it 'keeps expired invitations that were accepted'
+  it 'keeps expired invitations that were accepted' do
+    invitation.update!(invitation_accepted: true)
+    CleanupExpiredInvitationsJob.perform_now
+    expect(Invitation.exists?(invitation.id)).to be(true)
+  end
 
   it 'keeps invitations that have not expired yet'
 end
