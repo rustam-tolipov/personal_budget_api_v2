@@ -21,5 +21,9 @@ RSpec.describe CleanupExpiredInvitationsJob, type: :job do
     expect(Invitation.exists?(invitation.id)).to be(true)
   end
 
-  it 'keeps invitations that have not expired yet'
+  it 'keeps invitations that have not expired yet' do
+    invitation.update!(expiration_date: Date.tomorrow)
+    CleanupExpiredInvitationsJob.perform_now
+    expect(Invitation.exists?(invitation.id)).to be(true)
+  end
 end
