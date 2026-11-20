@@ -18,7 +18,7 @@ class Invitation < ApplicationRecord
   end
 
   def expired?
-    expiration_date < Time.now.utc
+    expiration_date <= Time.current
   end
 
   def accept!
