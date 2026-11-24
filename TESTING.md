@@ -32,12 +32,6 @@ the controller in isolation without routing or middleware. These are request spe
 | `user_spec` | Presence validations, uniqueness, min lengths | Tests `first_name`, `last_name` presence and 8-char password minimum — these validations do not exist on the User model. Tests will fail. |
 | `member_spec` | Nothing | File exists with `pending` only |
 
-### Mailers
-
-| File | Covered | Notes |
-|---|---|---|
-| `user_mailer_spec` | Nothing | File exists with `pending` only |
-
 ---
 
 ## What Is Not Tested
