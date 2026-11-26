@@ -22,15 +22,12 @@ the controller in isolation without routing or middleware. These are request spe
 |---|---|---|
 | `sessions_controller_spec` | Login (token + 200), missing password (401), logout | Logout context has no assertions — tests nothing |
 | `registrations_controller_spec` | Signup success (200), duplicate email (422) | - |
-| `members_controller_spec` | GET /members (200), POST /members (201) | - |
-| `categories_controller_spec` | POST /categories single member, POST /categories multiple members | - |
 
 ### Models
 
 | File | Covered | Notes |
 |---|---|---|
-| `user_spec` | Presence validations, uniqueness, min lengths | Tests `first_name`, `last_name` presence and 8-char password minimum — these validations do not exist on the User model. Tests will fail. |
-| `member_spec` | Nothing | File exists with `pending` only |
+| `invitation_spec` | Token on create, email presence, duplicate email in the same group, `expired?` at the exact expiration moment | - |
 
 ---
 
@@ -67,19 +64,6 @@ the controller in isolation without routing or middleware. These are request spe
 
 ## Known Issues in Existing Specs
 
-### Tests asserting non-existent validations (`user_spec`)
-
-`user_spec.rb` tests the following behaviors that the `User` model does not enforce:
-
-```ruby
-it 'is not valid without a first name'   # no validates :first_name presence on User
-it 'is not valid without a last name'    # no validates :last_name presence on User
-it 'is not valid if password is less than 8 characters'  # Devise config sets minimum to 6
-```
-
-These tests will fail when run. Either the validations need to be added to the model,
-or the tests need to be corrected to match actual behavior.
-
 ### Logout test has no assertions (`sessions_controller_spec`)
 
 ```ruby
@@ -106,10 +90,9 @@ the intent clear to anyone reading the project.
 
 When you are ready to write tests, work in this order:
 
-1. Fix the broken `user_spec` assertions (validations vs model mismatch)
-2. Write `Transaction` model spec (validates presence, `after_destroy` callback)
-3. Write `TransactionsController` request spec (create with rollback scenario, update, destroy)
-4. Move existing specs from `spec/controllers/` to `spec/requests/`
-5. Fill in missing controller actions (members destroy, categories remove_from_member)
-6. Write `TotalAmount` and `Category` model specs
-7. Add assertions to the logout test
+1. Write `Transaction` model spec (validates presence, `after_destroy` callback)
+2. Write `TransactionsController` request spec (create with rollback scenario, update, destroy)
+3. Move existing specs from `spec/controllers/` to `spec/requests/`
+4. Fill in missing controller actions (members destroy, categories remove_from_member)
+5. Write `TotalAmount` and `Category` model specs
+6. Add assertions to the logout test
