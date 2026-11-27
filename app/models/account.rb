@@ -22,9 +22,13 @@ class Account < ApplicationRecord
   validates :username, presence: true, uniqueness: { case_sensitive: false }, length: { minimum: 3 }
   validates :email, presence: true
 
-  scope :search, ->(query) {
-    query.present? ? where("username ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ?",
-      "%#{query}%", "%#{query}%", "%#{query}%") : none
+  scope :search, lambda { |query|
+    if query.present?
+      where('username ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ?',
+            "%#{query}%", "%#{query}%", "%#{query}%")
+    else
+      none
+    end
   }
 
   private

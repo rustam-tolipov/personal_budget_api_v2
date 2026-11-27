@@ -48,7 +48,7 @@ RSpec.configure do |config|
               },
               password_confirmation: {
                 type: :string
-              },
+              }
             }
           },
           user_login: {
@@ -58,12 +58,12 @@ RSpec.configure do |config|
               password: { type: :string }
             }
           }
-        },
+        }
       },
       tags: [
         { name: 'Users' },
         { name: 'Authentication' },
-        { name: 'Search' },
+        { name: 'Search' }
       ],
       paths: {
         '/api/v1/auth/signup': {
@@ -214,7 +214,7 @@ RSpec.configure do |config|
               }
             }
           }
-        },
+        }
       },
       servers: [
         {
