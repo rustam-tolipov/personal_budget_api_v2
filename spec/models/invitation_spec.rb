@@ -23,4 +23,15 @@ RSpec.describe Invitation, type: :model do
                                        family_group: @family_group, inviter: @account)
     expect(second_invitation).not_to be_valid
   end
+
+  describe '#expired?' do
+    include ActiveSupport::Testing::TimeHelpers
+
+    it 'is expired at the exact expiration moment' do
+      freeze_time do
+        @invitation.expiration_date = Time.current
+        expect(@invitation.expired?).to be(true)
+      end
+    end
+  end
 end

@@ -11,12 +11,14 @@ class Invitation < ApplicationRecord
   before_validation :generate_token, on: :create
   before_validation :set_expiration_date, on: :create
 
+  scope :expired, -> { where(expiration_date: ..Time.current) }
+
   def accepted?
     invitation_accepted
   end
 
   def expired?
-    expiration_date < Time.now.utc
+    expiration_date <= Time.current
   end
 
   def accept!

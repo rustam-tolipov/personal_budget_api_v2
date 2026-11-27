@@ -6,6 +6,9 @@ module Api
         return render json: { errors: ['Family group not found'] }, status: :not_found unless membership
         return render json: { errors: ['Only admins can invite'] }, status: :forbidden unless membership.admin?
 
+        membership.family_group.invitations.expired.where(invitation_email: invitation_params[:invitation_email],
+                                                          invitation_accepted: false).delete_all
+
         invitation = membership.family_group.invitations.new(invitation_params.merge(inviter: current_account))
 
         if invitation.save
