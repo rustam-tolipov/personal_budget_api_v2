@@ -1,3 +1,10 @@
+inherit_from: .rubocop_todo.yml
+
+# Exclude lists here and in the todo file add up instead of replacing each other
+inherit_mode:
+  merge:
+    - Exclude
+
 plugins:
   - rubocop-rails
   - rubocop-rspec
