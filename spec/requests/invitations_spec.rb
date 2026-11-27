@@ -86,5 +86,39 @@ describe 'Invitations', type: :request do
       json_response = response.parsed_body
       expect(json_response['errors']).to eq(['Invitation email has already been invited to this group'])
     end
+
+    it 'creates a new invitation when the old one for that email has expired' do
+      make_request('ali@email.com')
+
+      expect(response).to have_http_status(:created)
+      expect(Invitation.where(invitation_email: 'ali@email.com').last.expired?).to be(false)
+
+      expired_email = Invitation.where(invitation_email: 'ali@email.com').last
+      expired_email.update!(expiration_date: 1.day.ago)
+
+      expect(Invitation.where(invitation_email: 'ali@email.com').last.expired?).to be(true)
+
+      make_request('ali@email.com')
+      expect(response).to have_http_status(201)
+      expect(Invitation.last.invitation_accepted).to eq(false)
+      expect(Invitation.last.token).not_to eq(expired_email.token)
+      expect(InvitationMailerJob).to have_been_enqueued.with(Invitation.last.id)
+    end
+
+    it 'returns 422 when the expired invitation was already accepted' do
+      make_request('ali@email.com')
+
+      expect(response).to have_http_status(:created)
+      expect(Invitation.where(invitation_email: 'ali@email.com').last.expired?).to be(false)
+
+      expired_email = Invitation.where(invitation_email: 'ali@email.com').last
+      expired_email.update!(expiration_date: 1.day.ago, invitation_accepted: true)
+
+      make_request('ali@email.com')
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(Invitation.last.invitation_accepted).to eq(true)
+      expect(Invitation.last.token).to eq(expired_email.token)
+    end
   end
 end
